@@ -65,8 +65,18 @@ function renderProject(project) {
   nextButton.setAttribute('aria-label', `Siguiente proyecto: ${next.client}, ${next.title}`);
   const nextLabel = element('span');
   nextLabel.append(element('span', 'eyebrow', `Siguiente proyecto / ${next.client}`), element('span', 'case-next-title', next.title));
-  const arrow = element('span', 'case-next-arrow', '↗');
+  const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  arrow.setAttribute('class', 'icon-arrow case-next-arrow');
+  arrow.setAttribute('viewBox', '0 0 32 32');
+  arrow.setAttribute('fill', 'none');
+  arrow.setAttribute('stroke', 'currentColor');
+  arrow.setAttribute('stroke-width', '2.5');
+  arrow.setAttribute('stroke-linecap', 'square');
   arrow.setAttribute('aria-hidden', 'true');
+  arrow.setAttribute('focusable', 'false');
+  const arrowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  arrowPath.setAttribute('d', 'M6 6h20v20M26 6 6 26');
+  arrow.append(arrowPath);
   nextButton.append(nextLabel, arrow);
   nextButton.addEventListener('click', () => openProject(next.id, { replace: true }));
 

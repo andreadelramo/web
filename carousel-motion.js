@@ -169,7 +169,13 @@ export function initCarouselMotion(track, stage) {
   }
   window.addEventListener('pointerup', endDrag);
   window.addEventListener('pointercancel', endDrag);
-  track.addEventListener('lostpointercapture', () => { if (drag) { releasePointer(); stop(); } });
+  track.addEventListener('lostpointercapture', event => {
+    // Touch capture moves from the image/link to the track after a swipe starts.
+    // Its bubbling loss event must not cancel the track's new capture.
+    if (event.target !== track || !drag || event.pointerId !== drag.id) return;
+    releasePointer();
+    stop();
+  });
   window.addEventListener('blur', () => { releasePointer(); stop(); });
   document.addEventListener('visibilitychange', () => { if (document.hidden) { releasePointer(); stop(); } });
   track.addEventListener('dragstart', event => event.preventDefault());
