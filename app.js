@@ -67,6 +67,8 @@ function renderProject(project) {
   nextLabel.append(element('span', 'eyebrow', `Siguiente proyecto / ${next.client}`), element('span', 'case-next-title', next.title));
   const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   arrow.setAttribute('class', 'icon-arrow case-next-arrow');
+  arrow.setAttribute('width', '64');
+  arrow.setAttribute('height', '64');
   arrow.setAttribute('viewBox', '0 0 32 32');
   arrow.setAttribute('fill', 'none');
   arrow.setAttribute('stroke', 'currentColor');
