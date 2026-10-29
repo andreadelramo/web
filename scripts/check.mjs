@@ -29,11 +29,17 @@ for (const [name, page] of pages) {
   }
   for (const match of page.matchAll(/<img\b[^>]*>/g)) assert(/\balt="[^"]+"/.test(match[0]), `Image without alt in ${name}: ${match[0]}`);
 }
-assert.equal(projects.length, 4);
-assert.equal(new Set(projects.map(project => project.id)).size, 4);
+assert.equal(projects.length, 5);
+assert.equal(new Set(projects.map(project => project.id)).size, 5);
 const projectLinks = [...html.matchAll(/data-project="([^"]+)"/g)].map(match => match[1]);
 assert.deepEqual(projectLinks, projects.map(project => project.id));
 for (const project of projects) {
+  if (project.comingSoon) {
+    assert(project.coverAlt, `Missing image description: ${project.id}`);
+    await access(new URL(project.cover, root));
+    references++;
+    continue;
+  }
   assert(project.paragraphs.length >= 4, `Incomplete case: ${project.id}`);
   assert(project.coverAlt && project.gallery.length === 2, `Missing image descriptions: ${project.id}`);
   const header = await readFile(new URL(project.header.src, root));
@@ -59,5 +65,6 @@ for (const file of ['app.js', 'content.js', 'carousel-motion.js', 'page-effects.
   const result = spawnSync(process.execPath, ['--check', fileURLToPath(new URL(file, root))], { encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr);
 }
-console.log(`OK: 2 pages, 4 complete cases, ${references} local references, unique IDs, valid anchors, image descriptions, original PDF and JavaScript syntax.`);
+assert.equal(projects.filter(project => !project.comingSoon).length, 4);
+console.log(`OK: 2 pages, 5 carousel projects, 4 complete cases, ${references} local references, unique IDs, valid anchors, image descriptions, original PDF and JavaScript syntax.`);
 console.log('Browser layout, keyboard focus and animations require a browser review.');

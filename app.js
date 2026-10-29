@@ -2,6 +2,9 @@ import { projects } from './content.js';
 import { initCarouselMotion, wrapIndex } from './carousel-motion.js';
 import { initScrollReveals } from './page-effects.js';
 
+const detailedProjects = projects.filter(project => !project.comingSoon);
+const projectCount = String(projects.length).padStart(2, '0');
+
 const dialog = document.querySelector('#case-dialog');
 const content = document.querySelector('#case-content');
 const counter = document.querySelector('#case-counter');
@@ -59,7 +62,7 @@ function renderProject(project) {
     gallery.append(figure);
   });
 
-  const next = projects[(projects.indexOf(project) + 1) % projects.length];
+  const next = detailedProjects[(detailedProjects.indexOf(project) + 1) % detailedProjects.length];
   const nextButton = element('button', 'case-next');
   nextButton.type = 'button';
   nextButton.setAttribute('aria-label', `Siguiente proyecto: ${next.client}, ${next.title}`);
@@ -83,12 +86,12 @@ function renderProject(project) {
   nextButton.addEventListener('click', () => openProject(next.id, { replace: true }));
 
   content.replaceChildren(heading, cover, story, gallery, nextButton);
-  counter.textContent = `${project.number} / 04`;
+  counter.textContent = `${project.number} / ${projectCount}`;
   return title;
 }
 
 function openProject(id, { navigate = true, replace = false } = {}) {
-  const project = projects.find(item => item.id === id);
+  const project = detailedProjects.find(item => item.id === id);
   if (!project || typeof dialog.showModal !== 'function') return;
   if (dialog.open && activeProject === id) return;
 
@@ -116,7 +119,7 @@ function openProject(id, { navigate = true, replace = false } = {}) {
 
 function syncProjectFromUrl() {
   const id = location.hash.startsWith(projectPrefix) ? location.hash.slice(projectPrefix.length) : null;
-  if (projects.some(project => project.id === id)) openProject(id, { navigate: false });
+  if (detailedProjects.some(project => project.id === id)) openProject(id, { navigate: false });
   else if (dialog.open) dialog.close();
 }
 
@@ -129,7 +132,7 @@ function closeProject() {
   }
 }
 
-document.querySelectorAll('[data-project]').forEach(link => {
+document.querySelectorAll('a[data-project]').forEach(link => {
   link.addEventListener('click', event => {
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0 || typeof dialog.showModal !== 'function') return;
     event.preventDefault();
@@ -169,7 +172,7 @@ let scrollFrame = null;
 function updateCarousel() {
   slideIndex = carouselMotion.activeIndex;
   const project = projects.find(item => item.id === slides[slideIndex].dataset.project);
-  carouselPosition.textContent = `${project.number} / 04`;
+  carouselPosition.textContent = `${project.number} / ${projectCount}`;
   previousSlide.setAttribute('aria-disabled', 'false');
   nextSlide.setAttribute('aria-disabled', 'false');
 }

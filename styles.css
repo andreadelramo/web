@@ -73,6 +73,7 @@ html.is-leaving body > main { animation: none; opacity: 0; transform: translateY
 .home-page .project:nth-child(2) { --entrance-delay: 510ms; }
 .home-page .project:nth-child(3) { --entrance-delay: 600ms; }
 .home-page .project:nth-child(4) { --entrance-delay: 690ms; }
+.home-page .project:nth-child(5) { --entrance-delay: 780ms; }
 .home-page .project-info { animation-delay: var(--entrance-delay); }
 .home-page .project-image { animation-delay: calc(var(--entrance-delay) + 50ms); }
 .site-header a:focus-visible,

@@ -38,7 +38,13 @@ export const projects = [
     ]
   },
   {
-    id: 'dokify', number: '03', client: 'Dokify', title: 'Sistema de diseño',
+    id: 'natural-typography', number: '03', client: 'Proyecto Personal', title: 'Natural Typography',
+    comingSoon: true,
+    cover: 'assets/natural-typography-cover.png',
+    coverAlt: 'Natural Typography en una tableta: una tipografía manuscrita con controles de color y tamaño.'
+  },
+  {
+    id: 'dokify', number: '04', client: 'Dokify', title: 'Sistema de diseño',
     discipline: 'Design systems · Producto digital', color: '#a5a0d4',
     cover: 'assets/dokify-cover.jpg',
     header: { src: 'assets/dokify-header.png', width: 2368, height: 1294 },
@@ -57,7 +63,7 @@ export const projects = [
     ]
   },
   {
-    id: 'ctt', number: '04', client: 'CTT Express', title: 'Web cliente',
+    id: 'ctt', number: '05', client: 'CTT Express', title: 'Web cliente',
     discipline: 'Diseño UI · Logística', color: '#d34c31',
     cover: 'assets/ctt-cover.jpg',
     header: { src: 'assets/ctt-header.png', width: 2324, height: 1418 },
