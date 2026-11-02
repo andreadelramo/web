@@ -38,10 +38,46 @@ export const projects = [
     ]
   },
   {
-    id: 'natural-typography', number: '03', client: 'Proyecto Personal', title: 'Natural Typography',
-    comingSoon: true,
-    cover: 'assets/natural-typography-cover.png',
-    coverAlt: 'Natural Typography en una tableta: una tipografía manuscrita con controles de color y tamaño.'
+    id: 'natural-typography', number: '03', client: 'Proyecto personal', title: 'Natural Typography',
+    detailLayout: 'natural',
+    discipline: 'Tipografía · Diseño y desarrollo web', color: '#d5d4cf',
+    cover: 'assets/natural-header-hd.png',
+    coverAlt: 'La web de Natural Typography en un portátil frente a un fondo amarillo lima.',
+    header: { src: 'assets/natural-header-hd.png', width: 2639, height: 1760, alt: 'La web de Natural Typography en un portátil frente a un fondo amarillo lima.' },
+    intro: 'La personalidad de escribir a mano.',
+    sections: [
+      {
+        id: 'origin', title: 'Origen',
+        paragraphs: ['Nace como proyecto personal sobre el gusto por la tipografía y la caligrafía manual. Al documentar procesos, me interesaba incorporar contenido escrito a mano, pero sentía que muchas tipografías de estilo handmade perdían autenticidad: sus caracteres solían ser demasiado uniformes. Quería trasladar al entorno digital las pequeñas variaciones que aparecen al escribir y crear una tipografía capaz de reflejar esa aleatoriedad.']
+      },
+      {
+        id: 'development', title: 'Desarrollo', specimen: true,
+        paragraphs: [
+          'Empecé con una pequeña prueba para comprobar si era posible crear letras que alternaran entre distintas formas. Como era mi primera experiencia desarrollando una tipografía, investigué varias herramientas, sus límites y cómo incorporar funciones programables.',
+          'Para empezar, trabajé con solo dos glifos y creé dos variantes de cada uno. Esto me ayudó a entender la relación entre las formas y cómo pasar de una a otra. Después, conecté las variantes con clases de CSS y un script en JavaScript para que alternaran de forma dinámica. Así pude explorar tanto el diseño de las letras como su comportamiento.',
+          'Por último, apliqué esa misma lógica al resto de los caracteres de la tipografía.'
+        ]
+      },
+      {
+        id: 'result', title: 'Resultado',
+        paragraphs: ['El resultado es una tipografía funcional con un toque de aleatoriedad. La web de presentación sigue esta misma idea: el bloque de descripción muestra composiciones creadas con la tipografía y las demostraciones exploran algunos de sus usos con animaciones y ejemplos prácticos.'],
+        link: { label: 'Natural Typography Web', href: 'https://andreadelramo.github.io/NaturalTypography/' }
+      }
+    ],
+    moodboard: [
+      { src: 'assets/natural-mood-poster-hd.png', alt: 'Cartel de una fiesta con ilustración y caligrafía manual.', bounds: [0, 0, 229.526, 284.44] },
+      { src: 'assets/natural-mood-idea-hd.png', alt: 'Composición manuscrita con el texto The idea of it vs. it.', bounds: [239.8, 0, 460.194, 321.837] },
+      { src: 'assets/natural-mood-photo-hd.png', alt: 'Fotografía en blanco y negro con anotaciones manuscritas.', bounds: [0, 303.7, 229.526, 291.239] },
+      { src: 'assets/natural-mood-dancer.png', alt: 'Fotografía de un bailarín rodeada de caligrafía amarilla.', bounds: [239.8, 333.2, 460.194, 564.347] },
+      { src: 'assets/natural-mood-notes.png', alt: 'Notas manuscritas y tachaduras como referencia de variación caligráfica.', bounds: [735.391, 0, 583.656, 505.398] },
+      { src: 'assets/natural-mood-portrait-hd.png', alt: 'Retrato en blanco y negro con la frase manuscrita I am a loner.', bounds: [735.52, 552, 292, 346] }
+    ],
+    previews: [
+      { slot: 'statement', src: 'assets/natural-preview-statement-hd.png', alt: 'Composición de la web que presenta la aleatoriedad de la caligrafía real.' },
+      { slot: 'glyphs', src: 'assets/natural-preview-glyphs-hd.png', alt: 'Letra R y repertorio de glifos de Natural Typography.' },
+      { slot: 'tester', src: 'assets/natural-preview-tester-hd.png', alt: 'Probador de Natural Typography con controles de texto, color y tamaño.' },
+      { slot: 'description', src: 'assets/natural-preview-description-hd.png', alt: 'Composiciones y fotografías de la sección de descripción de Natural Typography.' }
+    ]
   },
   {
     id: 'dokify', number: '04', client: 'Dokify', title: 'Sistema de diseño',

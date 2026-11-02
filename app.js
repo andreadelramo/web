@@ -31,7 +31,81 @@ function projectImage(src, alt, eager = false) {
   return img;
 }
 
+function arrowIcon(className = '') {
+  const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  for (const [name, value] of Object.entries({
+    class: `icon-arrow ${className}`, width: '16', height: '16', viewBox: '0 0 32 32',
+    fill: 'none', stroke: 'currentColor', 'stroke-width': '2.5',
+    'stroke-linecap': 'square', 'aria-hidden': 'true', focusable: 'false'
+  })) arrow.setAttribute(name, value);
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', 'M6 6h20v20M26 6 6 26');
+  arrow.append(path);
+  return arrow;
+}
+
+function renderStory({ id, title, paragraphs, specimen, link }) {
+  const story = element('section', `case-story${id ? ` natural-${id}` : ''}`);
+  const label = element('h3', '', title);
+  label.id = id ? `case-${id}-title` : 'case-story-title';
+  story.setAttribute('aria-labelledby', label.id);
+  const heading = element('div', 'case-section-heading');
+  heading.append(label);
+  if (specimen) {
+    const sample = element('div', 'natural-specimen');
+    sample.setAttribute('aria-label', 'Tres variantes de la letra A');
+    for (let i = 1; i <= 3; i++) sample.append(element('span', `natural-variant-${i}`, 'A'));
+    heading.append(sample);
+  }
+  if (link) {
+    const visit = element('a', 'natural-visit', link.label);
+    visit.href = link.href;
+    visit.target = '_blank';
+    visit.rel = 'noopener noreferrer';
+    visit.append(arrowIcon('icon-arrow-right'));
+    heading.append(visit);
+  }
+  const copy = element('div', 'case-paragraphs');
+  paragraphs.forEach(text => copy.append(element('p', '', text)));
+  story.append(heading, copy);
+  return story;
+}
+
+function renderNaturalBody(project) {
+  const moodboard = element('section', 'natural-moodboard');
+  moodboard.setAttribute('aria-label', 'Moodboard de referencias');
+  const composition = element('figure', 'natural-moodboard-stage');
+  project.moodboard.forEach(item => {
+    const image = projectImage(item.src, item.alt);
+    image.className = 'natural-mood-item';
+    const [x, y, width, height] = item.bounds;
+    Object.assign(image.style, {
+      left: `${x / 1319.063 * 100}%`, top: `${y / 897.547 * 100}%`,
+      width: `${width / 1319.063 * 100}%`, height: `${height / 897.547 * 100}%`
+    });
+    composition.append(image);
+  });
+  composition.append(
+    element('span', 'natural-moodboard-note', 'Pruebas de alternancia de glifos y variantes en Glyphs 3.'),
+    element('figcaption', 'natural-moodboard-label', 'Moodboard')
+  );
+  moodboard.append(composition);
+
+  const previews = element('section', 'natural-previews');
+  previews.setAttribute('aria-label', 'Vistas de la web Natural Typography');
+  const columns = [element('div', 'natural-preview-column natural-preview-side'), element('div', 'natural-preview-column'), element('div', 'natural-preview-column natural-preview-side')];
+  project.previews.forEach(item => {
+    const index = item.slot === 'statement' ? 0 : item.slot === 'description' ? 2 : 1;
+    columns[index].append(projectImage(item.src, item.alt));
+  });
+  previews.append(...columns);
+  const outcome = element('div', 'natural-outcome');
+  outcome.append(previews, renderStory(project.sections[2]));
+  return [renderStory(project.sections[0]), moodboard, renderStory(project.sections[1]), outcome];
+}
+
 function renderProject(project) {
+  content.classList.toggle('natural-case', project.detailLayout === 'natural');
   const heading = element('header', 'case-heading');
   const meta = element('div', 'case-meta');
   meta.append(element('span', '', `${project.number} / ${project.client}`), element('span', '', project.discipline));
@@ -42,50 +116,36 @@ function renderProject(project) {
 
   const cover = element('figure', 'case-cover');
   cover.style.setProperty('--case-color', project.color);
-  const headerImage = projectImage(project.header.src, project.coverAlt, true);
+  const headerImage = projectImage(project.header.src, project.header.alt || project.coverAlt, true);
   headerImage.width = project.header.width;
   headerImage.height = project.header.height;
   cover.append(headerImage);
 
-  const story = element('section', 'case-story');
-  const storyLabel = element('h3', '', 'El proyecto');
-  storyLabel.id = 'case-story-title';
-  story.setAttribute('aria-labelledby', storyLabel.id);
-  const paragraphs = element('div', 'case-paragraphs');
-  project.paragraphs.forEach(text => paragraphs.append(element('p', '', text)));
-  story.append(storyLabel, paragraphs);
-
-  const gallery = element('div', 'case-gallery');
-  project.gallery.forEach(item => {
-    const figure = element('figure');
-    figure.append(projectImage(item.src, item.alt), element('figcaption', '', item.caption));
-    gallery.append(figure);
-  });
+  let body;
+  if (project.detailLayout === 'natural') body = renderNaturalBody(project);
+  else {
+    const story = renderStory({ title: 'El proyecto', paragraphs: project.paragraphs });
+    const gallery = element('div', 'case-gallery');
+    project.gallery.forEach(item => {
+      const figure = element('figure');
+      figure.append(projectImage(item.src, item.alt), element('figcaption', '', item.caption));
+      gallery.append(figure);
+    });
+    body = [story, gallery];
+  }
 
   const next = detailedProjects[(detailedProjects.indexOf(project) + 1) % detailedProjects.length];
   const nextButton = element('button', 'case-next');
   nextButton.type = 'button';
   nextButton.setAttribute('aria-label', `Siguiente proyecto: ${next.client}, ${next.title}`);
-  const nextLabel = element('span');
+  const nextLabel = element('span', 'case-next-label');
   nextLabel.append(element('span', 'eyebrow', `Siguiente proyecto / ${next.client}`), element('span', 'case-next-title', next.title));
-  const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  arrow.setAttribute('class', 'icon-arrow case-next-arrow');
-  arrow.setAttribute('width', '64');
-  arrow.setAttribute('height', '64');
-  arrow.setAttribute('viewBox', '0 0 32 32');
-  arrow.setAttribute('fill', 'none');
-  arrow.setAttribute('stroke', 'currentColor');
-  arrow.setAttribute('stroke-width', '2.5');
-  arrow.setAttribute('stroke-linecap', 'square');
+  const arrow = element('span', 'case-next-arrow');
   arrow.setAttribute('aria-hidden', 'true');
-  arrow.setAttribute('focusable', 'false');
-  const arrowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  arrowPath.setAttribute('d', 'M6 6h20v20M26 6 6 26');
-  arrow.append(arrowPath);
   nextButton.append(nextLabel, arrow);
   nextButton.addEventListener('click', () => openProject(next.id, { replace: true }));
 
-  content.replaceChildren(heading, cover, story, gallery, nextButton);
+  content.replaceChildren(heading, cover, ...body, nextButton);
   counter.textContent = `${project.number} / ${projectCount}`;
   return title;
 }
@@ -113,7 +173,8 @@ function openProject(id, { navigate = true, replace = false } = {}) {
   dialog.scrollTop = 0;
   title.focus({ preventScroll: true });
   cleanupProjectReveals = initScrollReveals(content, [
-    '.case-story h3', '.case-paragraphs > p', '.case-gallery > figure', '.case-next'
+    '.case-story h3', '.case-paragraphs > p', '.case-gallery > figure', '.case-next',
+    '.natural-specimen', '.natural-visit', '.natural-mood-item', '.natural-moodboard-label', '.natural-moodboard-note', '.natural-preview-column > img'
   ], { root: dialog });
 }
 

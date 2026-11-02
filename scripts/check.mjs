@@ -16,7 +16,10 @@ for (const [name, page] of pages) {
   }
   for (const [, attribute, value] of page.matchAll(/\b(src|href)="([^"]+)"/g)) {
     if (/^(https?:|mailto:)/.test(value)) continue;
-    if (value.startsWith('#')) assert(ids.has(value.slice(1)), `Missing anchor in ${name}: ${value}`);
+    if (value.startsWith('#')) {
+      const project = value.startsWith('#proyecto-') && projects.find(project => project.id === value.slice(10) && !project.comingSoon);
+      assert(ids.has(value.slice(1)) || project, `Missing anchor in ${name}: ${value}`);
+    }
     else {
       const [path, anchor] = value.split('#');
       await access(new URL(path, root));
@@ -40,13 +43,15 @@ for (const project of projects) {
     references++;
     continue;
   }
-  assert(project.paragraphs.length >= 4, `Incomplete case: ${project.id}`);
-  assert(project.coverAlt && project.gallery.length === 2, `Missing image descriptions: ${project.id}`);
+  const paragraphs = project.sections ? project.sections.flatMap(section => section.paragraphs) : project.paragraphs;
+  assert(paragraphs.length >= 4, `Incomplete case: ${project.id}`);
+  assert(project.coverAlt, `Missing image description: ${project.id}`);
+  if (!project.sections) assert.equal(project.gallery.length, 2, `Incomplete gallery: ${project.id}`);
   const header = await readFile(new URL(project.header.src, root));
   assert.equal(header.subarray(1, 4).toString(), 'PNG', `Invalid header image: ${project.id}`);
   assert.equal(header.readUInt32BE(16), project.header.width, `Incorrect header width: ${project.id}`);
   assert.equal(header.readUInt32BE(20), project.header.height, `Incorrect header height: ${project.id}`);
-  for (const item of [{ src: project.cover, alt: project.coverAlt }, { src: project.header.src, alt: project.coverAlt }, ...project.gallery]) {
+  for (const item of [{ src: project.cover, alt: project.coverAlt }, { src: project.header.src, alt: project.header.alt || project.coverAlt }, ...(project.gallery || []), ...(project.moodboard || []), ...(project.previews || [])]) {
     assert(item.alt, `Missing alternative text: ${item.src}`);
     await access(new URL(item.src, root));
     references++;
@@ -65,6 +70,6 @@ for (const file of ['app.js', 'content.js', 'carousel-motion.js', 'page-effects.
   const result = spawnSync(process.execPath, ['--check', fileURLToPath(new URL(file, root))], { encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr);
 }
-assert.equal(projects.filter(project => !project.comingSoon).length, 4);
-console.log(`OK: 2 pages, 5 carousel projects, 4 complete cases, ${references} local references, unique IDs, valid anchors, image descriptions, original PDF and JavaScript syntax.`);
+assert.equal(projects.filter(project => !project.comingSoon).length, 5);
+console.log(`OK: 2 pages, 5 carousel projects, 5 complete cases, ${references} local references, unique IDs, valid anchors, image descriptions, original PDF and JavaScript syntax.`);
 console.log('Browser layout, keyboard focus and animations require a browser review.');
