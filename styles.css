@@ -280,6 +280,20 @@ strong { font-weight: 500; color: var(--text); }
 .natural-visit { display: inline-flex; align-items: center; gap: 10px; max-width: 100%; padding: 24px 29px; border-radius: 999px; background: #181818; color: #f0efed; font-size: clamp(18px, 1.667vw, 24px); line-height: 1; box-shadow: 0 10px 12px #00000014; transition: background .2s; }
 .natural-visit:hover { background: #3c51b8; }
 .natural-visit .icon-arrow { width: .8em; height: .8em; }
+
+/* Maintainer Month — Figma 137:8719. */
+.github-case .case-story { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }
+.github-gallery { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 70px; padding: 75px var(--pad) 0; align-items: stretch; }
+.github-feature-image { position: relative; height: min(54.445vw, 784px); overflow: hidden; }
+.github-feature-image img { position: absolute; top: 0; left: -33.2%; width: 175.8%; max-width: none; height: 140.2%; object-fit: cover; }
+.github-phone-image { position: relative; height: 613px; margin-block: 86px; overflow: hidden; }
+.github-phone-image img { position: absolute; top: -13.22%; left: -81.7%; width: 286.3%; max-width: none; height: 146%; object-fit: cover; }
+.github-case .github-challenge { padding-top: 80px; }
+.github-award { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 35px; padding: 80px var(--pad); }
+.github-award-visual { width: 100%; max-width: 609px; aspect-ratio: 609 / 733; overflow: hidden; }
+.github-award-visual img { width: 100%; height: 100%; object-fit: cover; }
+.github-award-copy { width: min(100%, 444px); justify-self: center; padding-bottom: 80px; color: #41413b; font-size: 16px; line-height: 1.8; }
+
 @media (max-width: 680px) {
   .natural-case .case-story { grid-template-columns: 1fr; }
   .natural-specimen { margin-top: 30px; font-size: clamp(140px, 40vw, 220px); }
@@ -291,6 +305,17 @@ strong { font-weight: 500; color: var(--text); }
   .natural-moodboard-note { position: static; grid-column: 1 / -1; }
   .natural-previews { grid-template-columns: 1fr; gap: 24px; padding-top: 40px; padding-bottom: 300px; }
   .natural-preview-side { padding-top: 0; }
+  .github-case .case-story { grid-template-columns: 1fr; }
+  .github-case .github-concept { padding-top: 40px; }
+  .github-case .github-challenge { padding-top: 40px; }
+  .github-gallery { grid-template-columns: 1fr; gap: 24px; padding-top: 40px; }
+  .github-feature-image { height: auto; aspect-ratio: 4 / 3; }
+  .github-feature-image img { position: static; width: 100%; max-width: none; height: 100%; object-fit: cover; }
+  .github-phone-image { height: auto; aspect-ratio: 4 / 3; margin: 0; }
+  .github-phone-image img { position: static; width: 100%; max-width: none; height: 100%; object-fit: cover; }
+  .github-award { grid-template-columns: 1fr; gap: 24px; padding-block: 40px; }
+  .github-award-visual { max-width: none; }
+  .github-award-copy { width: 100%; justify-self: start; padding: 0; }
 }
 .in-view { animation: rise-in .7s ease-out both; }
 @keyframes rise-in { from { opacity: .35; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }

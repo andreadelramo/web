@@ -2,6 +2,7 @@
 export const projects = [
   {
     id: 'github', number: '01', client: 'GitHub', title: 'Maintainer Month',
+    detailLayout: 'github',
     discipline: 'Diseño digital · Open source', color: '#40225d',
     cover: 'assets/github-cover.jpg',
     header: { src: 'assets/github-header.png', width: 2384, height: 1294 },
@@ -15,8 +16,9 @@ export const projects = [
       'El proyecto recibió la felicitación del equipo de GitHub y fue reconocido por The Webby Awards como honoree en la categoría Events — General Website & Mobile Sites, poniendo en valor tanto la dirección conceptual del proyecto como la experiencia digital construida alrededor de su comunidad.'
     ],
     gallery: [
-      { src: 'assets/github-calendar.jpg', alt: 'Calendario de eventos de Maintainer Month en portátil y móvil.', caption: 'Un calendario abierto a las aportaciones de la comunidad.' },
-      { src: 'assets/github-mobile.jpg', alt: 'Versión móvil de Maintainer Month y reconocimiento Webby Honoree 2023.', caption: 'La misma experiencia, en cualquier pantalla.' }
+      { src: 'assets/github-calendar-framed.png', alt: 'Calendario de eventos de Maintainer Month en un portátil.' },
+      { src: 'assets/github-hand-hd.jpg', alt: 'Web de Maintainer Month en un móvil sostenido frente a un fondo de hormigón.' },
+      { src: 'assets/github-mobile.jpg', alt: 'Versión móvil de Maintainer Month junto al reconocimiento Webby Honoree 2023.' }
     ]
   },
   {

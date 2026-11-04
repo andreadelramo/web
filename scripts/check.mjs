@@ -46,7 +46,7 @@ for (const project of projects) {
   const paragraphs = project.sections ? project.sections.flatMap(section => section.paragraphs) : project.paragraphs;
   assert(paragraphs.length >= 4, `Incomplete case: ${project.id}`);
   assert(project.coverAlt, `Missing image description: ${project.id}`);
-  if (!project.sections) assert.equal(project.gallery.length, 2, `Incomplete gallery: ${project.id}`);
+  if (!project.sections) assert.equal(project.gallery.length, project.detailLayout === 'github' ? 3 : 2, `Incomplete gallery: ${project.id}`);
   const header = await readFile(new URL(project.header.src, root));
   assert.equal(header.subarray(1, 4).toString(), 'PNG', `Invalid header image: ${project.id}`);
   assert.equal(header.readUInt32BE(16), project.header.width, `Incorrect header width: ${project.id}`);

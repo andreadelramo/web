@@ -44,10 +44,10 @@ function arrowIcon(className = '') {
   return arrow;
 }
 
-function renderStory({ id, title, paragraphs, specimen, link }) {
-  const story = element('section', `case-story${id ? ` natural-${id}` : ''}`);
+function renderStory({ id, title, paragraphs, specimen, link, namespace = 'natural' }) {
+  const story = element('section', `case-story${id ? ` ${namespace}-${id}` : ''}`);
   const label = element('h3', '', title);
-  label.id = id ? `case-${id}-title` : 'case-story-title';
+  label.id = id ? `case-${namespace}-${id}-title` : 'case-story-title';
   story.setAttribute('aria-labelledby', label.id);
   const heading = element('div', 'case-section-heading');
   heading.append(label);
@@ -104,8 +104,36 @@ function renderNaturalBody(project) {
   return [renderStory(project.sections[0]), moodboard, renderStory(project.sections[1]), outcome];
 }
 
+function renderGithubBody(project) {
+  const [overview, overviewContext, concept, challenge, recognition] = project.paragraphs;
+  const [calendar, mobile, award] = project.gallery;
+
+  const gallery = element('section', 'github-gallery');
+  gallery.setAttribute('aria-label', 'Vistas de Maintainer Month en escritorio y móvil');
+  const calendarFigure = element('figure', 'github-feature-image');
+  calendarFigure.append(projectImage(calendar.src, calendar.alt));
+  const mobileFigure = element('figure', 'github-phone-image');
+  mobileFigure.append(projectImage(mobile.src, mobile.alt));
+  gallery.append(calendarFigure, mobileFigure);
+
+  const awardSection = element('section', 'github-award');
+  awardSection.setAttribute('aria-label', 'Reconocimiento Webby Honoree 2023');
+  const awardFigure = element('figure', 'github-award-visual');
+  awardFigure.append(projectImage(award.src, award.alt));
+  awardSection.append(awardFigure, element('p', 'github-award-copy', recognition));
+
+  return [
+    renderStory({ id: 'project', namespace: 'github', title: 'El proyecto', paragraphs: [overview, overviewContext] }),
+    renderStory({ id: 'concept', namespace: 'github', title: 'Concepto', paragraphs: [concept] }),
+    gallery,
+    renderStory({ id: 'challenge', namespace: 'github', title: 'Reto principal', paragraphs: [challenge] }),
+    awardSection
+  ];
+}
+
 function renderProject(project) {
   content.classList.toggle('natural-case', project.detailLayout === 'natural');
+  content.classList.toggle('github-case', project.detailLayout === 'github');
   const heading = element('header', 'case-heading');
   const meta = element('div', 'case-meta');
   meta.append(element('span', '', `${project.number} / ${project.client}`), element('span', '', project.discipline));
@@ -123,6 +151,7 @@ function renderProject(project) {
 
   let body;
   if (project.detailLayout === 'natural') body = renderNaturalBody(project);
+  else if (project.detailLayout === 'github') body = renderGithubBody(project);
   else {
     const story = renderStory({ title: 'El proyecto', paragraphs: project.paragraphs });
     const gallery = element('div', 'case-gallery');
@@ -174,6 +203,7 @@ function openProject(id, { navigate = true, replace = false } = {}) {
   title.focus({ preventScroll: true });
   cleanupProjectReveals = initScrollReveals(content, [
     '.case-story h3', '.case-paragraphs > p', '.case-gallery > figure', '.case-next',
+    '.github-gallery > figure', '.github-award-visual', '.github-award-copy',
     '.natural-specimen', '.natural-visit', '.natural-mood-item', '.natural-moodboard-label', '.natural-moodboard-note', '.natural-preview-column > img'
   ], { root: dialog });
 }
